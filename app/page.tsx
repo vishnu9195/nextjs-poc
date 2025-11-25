@@ -55,16 +55,33 @@ const Page: React.FC = () => {
     const timeInSeconds = ((end - start) / 1000).toFixed(2);
 
     console.log(`⏱ API Time: ${timeInSeconds} seconds`);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    console.log("" + minOccupancy + "----------------" + qualifiedPercentage);
-    getData();
+    if (qualifiedPercentage && minOccupancy) {
+      console.log("" + minOccupancy + "----------------" + qualifiedPercentage);
+      getData();
+    }
   }, [qualifiedPercentage, minOccupancy]);
 
   return (
     <main style={{ padding: "20px", fontFamily: "Arial" }}>
       {isLoading && <div>Loading data</div>}
+      <input
+        type="text"
+        value={`${minOccupancy}`}
+        onChange={(e) => setMinOccupancy(Number(e.currentTarget.value ?? "0"))}
+        disabled={isLoading}
+      />
+      <input
+        type="text"
+        value={`${qualifiedPercentage}`}
+        onChange={(e) =>
+          setQualifiedPercentage(Number(e.currentTarget.value ?? "0"))
+        }
+        disabled={isLoading}
+      />
       <OccupiedLineChart data={data} height={350} />
       <OccupiedLineChart data={graph2Data} height={350} />
     </main>
